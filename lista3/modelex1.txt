@@ -1,14 +1,16 @@
 model{for(i in 1:8){
 
-y[i]~dnorm(mu[i], 1)
-mu[i] ~ dnorm(mu2[i], tau )
+yj[i]~dnorm(theta[i], pre)
 
-tau[i] <- 11.375/T-11.375
+theta[i]~dnorm(mu, tau)
+
+
 }
   
-  mu2 ~ dnorm(0,0.001)
+  mu ~ dnorm(0,0.001)
   T ~ dunif(0,1)
-  
+  tau <- var/T-var
+  pre <- 1/tau
 
   }
 

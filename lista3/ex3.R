@@ -4,7 +4,7 @@ E = c(10.71,17.99,18.17,19.21, 21.96,14.63,9.62,17.27,18.82,18.27,32.18,24.59,8.
 
 # valores iniciais
 # ele identifica o que eh dado e o que eh parametro
-ini = list(lambda0 = 2 , pre = 0.01)
+ini = list(lambda0 = 2 , pre = 1)
 
 # parametros para monitorar
 params = c("lambda", "var")#pre
@@ -18,10 +18,50 @@ MLS.fit = bugs(
   n.chains = 1,
   n.iter = 3000,
   n.burnin = 2000,
-  debug = TRUE,
+  debug = FALSE,
   save.history = FALSE,
   DIC = TRUE
   
 )
 
+
+MLS.fit$summary
+# o valor do dic nao indica nada, apenas quando comparado com outros dic
+MLS.fit$DIC
+# complexidade do modelo - numero efetivo de parametros
+MLS.fit$pD
+
+# preparando os dados para uso no coda
+r = MLS.fit$sims.matrix
+r_mcmc = as.mcmc(r)
+
+# graficos
+
+# convergencia mcmc
+plot(r_mcmc[,1])
+plot(r_mcmc[,2])
+plot(r_mcmc[,3])
+
+# autocorrelacao dos valores da cadeia
+autocorr.plot(r_mcmc[,1:2])
+autocorr.plot(r_mcmc[,3])
+
+# faz a media movel com intervalo 90%
+cumuplot(r_mcmc[,1:2])
+cumuplot(r_mcmc[,3])
+
+# se os parametros forem mt correlacionados, 
+#vale fazer uma transformacao no parametro (padronizar o X)
+crosscorr(r_mcmc)
+# baseado em uma cadeia
+#separa a cadeia em duas partes e realiza um teste de comparacao de medias
+#valores altos de Z indicam a rejeicao da hipotese de igualdade de media
+geweke.diag(r_mcmc)
+
+# tamanho efetivo da amosta, 
+# que resultaria em um estimados com o mesmo erro padrao (variancia)
+# quanto mais perto do real, mais perto da amostra dependente
+effectiveSize(r_mcmc)
+
+HPDinterval(r_mcmc, prob = 0.95)
 

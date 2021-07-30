@@ -1,3 +1,5 @@
+setwd("~/Mestrado IME/Modelagem bayesiana/P2/lista4")
+
 attach(election)
 
 str(election)
@@ -20,8 +22,10 @@ MLS.fit = bugs(
   n.chains = 1,
   n.iter = 3000,
   n.burnin = 2000,
-  debug = TRUE,
+  debug = FALSE,
   save.history = FALSE,
   DIC = TRUE
   
 )
+
+MLS.fit$summary

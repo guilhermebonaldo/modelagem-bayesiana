@@ -2,16 +2,15 @@ model{for(j in 1:23){
 
 y[j]~dpois(mu[j])
 
-mu[j] <- exp(log(E[j]) + lambdaO + u[j])
+log(mu[j]) <- log(E[j]) + lambdaO + u[j]
 u[j]~dnorm(0,pre)
 
-
+var <- 1/pre
+lambda <- exp(lambdaO)
 
 }
 
 lambdaO~dnorm(0,0.001)
 pre~dgamma(1,0.001)
-var <- 1/pre
-lambda <- exp(lambdaO)
+
 }
-182
