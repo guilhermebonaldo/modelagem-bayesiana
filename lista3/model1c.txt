@@ -1,0 +1,12 @@
+
+model{for(j in 1:8){
+
+y[j]~dnorm(mu[j], pre[j])
+pre[j] <- l[j]/sigma2[j]
+
+mu[j]~dnorm(mu)
+}
+
+  l[j]~dgamma(3/2, 3/2)
+
+}
